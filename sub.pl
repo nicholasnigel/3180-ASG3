@@ -16,10 +16,10 @@ sub Average {
 
 		$average = $sum / $n;
 
-		print "Average : $average\n";
+		print "Average : ${average}\n";
 
 }
 
 
 Hello();
-Average(10,20,30);
+Average(40,20,30);

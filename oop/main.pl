@@ -5,6 +5,11 @@ package main;
 
 use WaterTypePokemon;
 
-my $object = new WaterTypePokemon(80,30);
+my $squirtle = new WaterTypePokemon(80,30);
+my $blastoise = new WaterTypePokemon(100,30);
 
-print $object->{"weight"}. " this guy so fat lor \n" ;
+$squirtle->attack($blastoise);
+
+print $squirtle->{"HP"}. "\n"  ;
+print $blastoise->{"HP"}. "\n" ;
+$squirtle->Hi();

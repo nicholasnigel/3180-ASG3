@@ -13,5 +13,18 @@ sub new{
     
     return $object;
 }
+sub Hi{
+print "Hello\n";
+
+}
+
+sub attack {
+    my $class = shift @_ ;
+    my $target = shift @_ ;
+    
+    $target->{"HP"} -= 10;
+}
+
+
 
 return 1;

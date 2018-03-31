@@ -10,8 +10,12 @@ sub printing {
     my $n = scalar(@{$list});
     print $n. "\n";
     
-    shift $list;
-    print $list->[0]. "\n";
+    #shift $list;
+    foreach (@{$list}){
+        print $_. "\n";
+    }
+
+    #print $list->[0]. "\n";
 
 }
 

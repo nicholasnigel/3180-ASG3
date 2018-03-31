@@ -24,6 +24,9 @@ sub getCards {
 #take card from the top of the deck(1st list) and put it into the game
 sub dealCards {
 #top of the list should be $self->{"cards"}->[0]
+    my $self = shift @_;
+    
+
 }
 
 sub numCards {

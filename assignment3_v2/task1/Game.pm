@@ -9,9 +9,9 @@ sub new {
 	#Instantiate a variable deck with a Deck object
     #and array to record players
 
-    $class = shift @_;
+    my $class = shift @_;
     #initialize new deck
-    $DeckObject = Deck->new();
+    my $DeckObject = Deck->new();
     #initializing player list starting with empty
     my @player_list =(' ');
 

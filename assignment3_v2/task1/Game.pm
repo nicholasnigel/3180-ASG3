@@ -36,7 +36,11 @@ sub set_players {
 #calculate how many will be returned to the player from the current stack
 sub getReturn {
     #check in the list if there is a repetiiton traverse the list
-    $
+    my $class = shift @_;
+    my $card_stack_ref = shift \@_;
+
+    
+
 }
 
 sub showCards {

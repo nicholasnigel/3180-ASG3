@@ -25,11 +25,17 @@ sub getCards {
 sub dealCards {
 #top of the list should be $self->{"cards"}->[0]
     my $self = shift @_;
-    
+    my $card_to_deal = $self->{"cards"}->[0];
+    #shift to pop the first element
+    shift $self->{"cards"};
+
+    return $card_to_deal;
 
 }
-
+#returning the current number of card
 sub numCards {
+    my $self = shift @_;
+    return scalar(@{self->{"cards"}});
 }
 
 return 1;

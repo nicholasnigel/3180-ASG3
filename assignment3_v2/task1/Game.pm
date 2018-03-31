@@ -39,6 +39,8 @@ sub getReturn {
     my $class = shift @_;
     my $card_stack_ref = shift \@_;
 
+    my $i = 0;  
+    my $j = $i +1;
     
 
 }

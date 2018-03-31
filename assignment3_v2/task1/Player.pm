@@ -21,8 +21,9 @@ sub getCards {
 
 }
 
+#take card from the top of the deck(1st list) and put it into the game
 sub dealCards {
-    
+
 }
 
 sub numCards {

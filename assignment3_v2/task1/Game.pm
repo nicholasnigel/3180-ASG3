@@ -13,9 +13,9 @@ sub new {
     #initialize new deck
     my $DeckObject = Deck->new();
     #initializing player list starting with empty
-    my @player_list =(' ');
-
-
+    my @player_list ={};
+    my $object = bless{"deck" => $DeckObject, "players" => \@players_list }, $class;
+    return $object;
 }
 
 sub set_players {

@@ -38,10 +38,13 @@ sub getReturn {
     #check in the list if there is a repetiiton traverse the list
     my $class = shift @_;
     my $card_stack_ref = shift \@_;
+    my $stack_num = scalar(@{card_stack_ref});
 
-    my $i = 0;  
-    my $j = $i +1;
+    my $i = 0;
+    my $j = $i + 1;
     
+    #double loop to check
+
 
 }
 

@@ -5,6 +5,9 @@ package Game;
 use MannerDeckStudent; 
 use Player;
 
+#variable shared by the players within the game
+our @card_stack = ();
+
 sub new {
 	#Instantiate a variable deck with a Deck object
     #and array to record players
@@ -35,26 +38,22 @@ sub set_players {
 
 #calculate how many will be returned to the player from the current stack
 sub getReturn {
-    #assuming that the passed parameter is the array of card stack
+    #use the shared parameter card_stack
     my $class = shift @_;
-
-    my $card_stack = \@_;
-    my $card_num = scalar(@{$card_stack});
-
-    my $i = 0;
     
-    while ($i < $card_num - 1 ) {
-        while ( my $j = $i+1 <$card_num) {
-            if $card_stack->[$i] == $card_stack->[j] {
-                #return the difference between that found number and the next number
-                return $j - $i;
-            }
-        }
-    }
-    #else if nothing of similar is found, then just you should return 0
-    return 0;
-}
+    my $i = 0;
 
+    my $card_stack_num = scalar(@card_stack);
+
+   while $i < $card_stack_num - 1 {
+       while my $j = $i +1 < $card_stack_num {
+           if $cards[$i] == $cards[$j] {
+               return $j - $i;
+           }
+       }
+   }
+}
+#show cards on cardstack
 sub showCards {
 	
 }

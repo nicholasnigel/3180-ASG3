@@ -7,7 +7,7 @@ use Player;
 
 #variable shared by the players within the game
 our @card_stack = ();
-
+#any self within this package means the game itself.
 sub new {
 	#Instantiate a variable deck with a Deck object
     #and array to record players
@@ -63,7 +63,36 @@ sub showCards {
 }
 
 sub start_game {
+    my $self = shift @_;
+    #deck should be shuffled evenly and distribute the cards evenly
+    #but check player_num first of all
+    my $number_of_players = scalar @{$self->{"players"}};
+    
+    # if >52 or 52%n !=0
+    if (52 % $number_of_players) != 0 || $number_of_players >52) {
+        #error message 
+        return 1;
+    }
 
+    # print statement
+
+    #print the names of player
+    foreach my $name ($self->{"players"}) {
+        print $name. "\n";
+    }
+
+    #shuffle deck
+    $self->{"deck"}->shuffle();
+
+    #distribute the cards to the players
+    $self->{"deck"}->AveDealCards($number_of_players);
+
+    #splice to remove a player 
+    #if no more card, remove the player , winner is the last person 
+    
+
+    
+    
 }
 
 return 1;

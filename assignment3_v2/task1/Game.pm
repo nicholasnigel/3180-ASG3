@@ -46,10 +46,12 @@ sub getReturn {
     while ($i < $card_num - 1 ) {
         while ( my $j = $i+1 <$card_num) {
             if $card_stack->[$i] == $card_stack->[j] {
+                #return the difference between that found number and the next number
                 return $j - $i;
             }
         }
     }
+    #else if nothing of similar is found, then just you should return 0
     return 0;
 }
 

@@ -55,7 +55,11 @@ sub getReturn {
 }
 #show cards on cardstack
 sub showCards {
-	
+	#use the @cards_stack variable to show what are there
+    my $class = shift @_;
+    print join (" ", @cards);
+    print "\n";
+
 }
 
 sub start_game {

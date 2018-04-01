@@ -35,17 +35,22 @@ sub set_players {
 
 #calculate how many will be returned to the player from the current stack
 sub getReturn {
-    #check in the list if there is a repetiiton traverse the list
+    #assuming that the passed parameter is the array of card stack
     my $class = shift @_;
-    my $card_stack_ref = shift \@_;
-    my $stack_num = scalar(@{card_stack_ref});
+
+    my $card_stack = \@_;
+    my $card_num = scalar(@{$card_stack});
 
     my $i = 0;
-    my $j = $i + 1;
     
-    #double loop to check
-
-
+    while ($i < $card_num - 1 ) {
+        while ( my $j = $i+1 <$card_num) {
+            if $card_stack->[$i] == $card_stack->[j] {
+                return $j - $i;
+            }
+        }
+    }
+    return 0;
 }
 
 sub showCards {

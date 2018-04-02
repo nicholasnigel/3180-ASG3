@@ -25,6 +25,12 @@ sub attack {
     $target->{"HP"} -= 10;
 }
 
+sub heal {
+    my $self =shift @_;
+
+    $self->{"HP"} += 10;
+
+}
 
 
 return 1;

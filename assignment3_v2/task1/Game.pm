@@ -90,6 +90,14 @@ sub start_game {
     #splice to remove a player 
     #if no more card, remove the player , winner is the last person 
     
+    while(scalar @{$self->{"players"}} > 1 ) {
+        # go through the player list and each should play
+        foreach $player ($self->{"players"}) {
+            #for each of the player in the list, then 
+            
+
+        }
+    }
 
     
     

@@ -88,7 +88,7 @@ sub start_game {
         return 1;
     }
 
-    # print statement
+    print "there ${number_of_players} players in the game:\n"
 
     #print the names of player
     foreach my $name ($self->{"players"}) {

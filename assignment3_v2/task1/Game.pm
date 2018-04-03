@@ -112,7 +112,7 @@ sub start_game {
             my $dealtCard = $player->dealCards();
             push(@card_stack, $dealtCard);    # push the dealt card to the game
             $self->checkDuplicateExist($dealtCard);       # check from card stack whether duplicate exists        
-
+            
 
         
 

@@ -13,9 +13,9 @@ sub new {
 #suppose the parameter is a list of card reference to be put on the bottom of the deck
 sub getCards {
     my $self = shift @_;
-    my $card_to_take = shift @_;
+    my $card_to_take = shift \@_;
 
-    foreach(@$card_to_take) {
+    foreach(@{$card_to_take}) {
         push @{$self->{"cards"}}, $_;
     }
 

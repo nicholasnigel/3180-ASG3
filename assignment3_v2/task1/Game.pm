@@ -67,12 +67,17 @@ sub checkDuplicateExist {
     my $dealtCard = shift @_;
 
     my $stack_number = scalar(@card_stack);
-    if ($stack_numer <2 ) {         # if the number of element in the stack is still 1, there is no way there is duplicate, so return 0
+    if ($stack_number <2 ) {         # if the number of element in the stack is still 1, there is no way there is duplicate, so return 0
         return 0;           
     }
 
     my $i = 0;
-    while ( $i < )
+    while ( $i < $stack_number -1 ) {
+        if $card_stack[$i] == $dealtCard {
+            return 1;
+        }
+        $i++;
+    } 
 
 }
 
@@ -111,9 +116,11 @@ sub start_game {
             #NOTE: push (@array, @list) will append @list to @array.
             my $dealtCard = $player->dealCards();
             push(@card_stack, $dealtCard);    # push the dealt card to the game
-            $self->checkDuplicateExist($dealtCard);       # check from card stack whether duplicate exists        
             
-
+            if($self->checkDuplicateExist($dealtCard)) 
+            {
+                
+            }
         
 
         }

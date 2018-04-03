@@ -28,6 +28,12 @@ sub printing2 {
         print $list->[$i]. " ";
         $i++;
     }
+    print "\n";
+
+    foreach my $i (@{$list}) {
+        print $i. " ";
+    }
+    print"\n";
     
 }
 

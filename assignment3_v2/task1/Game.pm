@@ -17,7 +17,7 @@ sub new {
     my $DeckObject = MannerDeckStudent->new();
     #initializing player list starting with empty
     my @player_list ={};
-    my $object = bless{"deck" => $DeckObject, "players" => \@players_list }, $class;
+    my $object = bless{"deck" => \$DeckObject, "players" => \@players_list }, $class;
     return $object;
 }
 
@@ -50,9 +50,15 @@ sub getReturn {
            if $cards[$i] == $cards[$j] {
                return $j - $i;
            }
+           if $cards[i] == "J" {
+               return scalar(@card_stack);
+           }
        }
    }
 }
+    return 0;           #if there are no duplicte found, then that means, return 0 because nothing is supposed to be returned
+
+
 #show cards on cardstack
 sub showCards {
 	#use the @cards_stack variable to show what are there
@@ -60,6 +66,10 @@ sub showCards {
     print join (" ", @cards);
     print "\n";
 
+}
+
+sub cardsToReturn {
+    
 }
 
 
@@ -87,11 +97,11 @@ sub start_game {
     $self->{"deck"}->shuffle();
 
     #distribute the cards to the players
-    my @dis_cards = $self->{"deck"}->AveDealCards($number_of_players);
+    my @dis_cards = $self->{"deck"}->AveDealCards($number_of_players);  #the list of distributed cards
 
     for my $i (0..$number_of_players -1 ) {
         my @tempdeck = @{$dis_cards[$i]};
-        $self->{"players"}[$i] -> getCards(\@tempdeck);
+        $self->{"players"}[$i] -> getCards(\@tempdeck);                 # each player get the deck
     }
 
     #splice to remove a player 
@@ -100,13 +110,13 @@ sub start_game {
     while(scalar @{$self->{"players"}} > 1 ) {
         # go through the player list and each should play
         foreach $player ($self->{"players"}) {
-            #each player deal a card , check if there are any returns
+           
             #NOTE: push (@array, @list) will append @list to @array.
-            my $dealtCard = $player->dealCards();
+            my $dealtCard = $player->dealCards();    # each player deal a card 
             push(@card_stack, $dealtCard);    # push the dealt card to the game
             
-            if( getReturn() > 0) {              #if the supposed return cards is greater than 0, 
-                
+            if( getReturn() > 0) {              #if the supposed return cards is greater than 0, means that there is a duplicate
+
             }
         
 

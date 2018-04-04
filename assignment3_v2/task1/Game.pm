@@ -68,8 +68,26 @@ sub showCards {
 
 }
 
-sub cardsToReturn {
+sub cardsToReturn { #this subroutine shall pass the list of cards from card stack to get cards , and delete it from the card stack
 
+    $self = shift @_;
+    $player = shift @_;
+    my $i = 0;
+
+    my $card_stack_num = scalar(@card_stack);
+
+   while $i < $card_stack_num - 1 {
+       while my $j = $i +1 < $card_stack_num {
+           if $cards[$i] == $cards[$j] {
+                my @to_return =  splice @card_stack , $i, $j-$i +1;
+                $player->getCards(\@to_return);
+           }
+           if $cards[i] == "J" {
+               return scalar(@card_stack);
+           }
+       }
+   }
+}
     
 
 }
@@ -118,7 +136,7 @@ sub start_game {
             push(@card_stack, $dealtCard);    # push the dealt card to the game
             
             if( getReturn() > 0) {              #if the supposed return cards is greater than 0, means that there is a duplicate
-                $self->cardsToReturn();
+                $self->cardsToReturn($player);
             }
         
 

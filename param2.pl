@@ -45,18 +45,24 @@ splice @{$names1} , 1, 1;
 
 sub splicing {
     my $names1 = shift @_;
+   print scalar(@{$names1});
+   print "\n";
+    my @result =splice @{$names1} , 2, 4;
 
-    splice @{$names1} ,5, 3;
-
+    print @result;
+    print "\n";
 }
 
 #printing (['james','jacqualine','jean']);
 #my @names = ("jon", "lambert");
 #printing2(@names);
-my @names1 = (0,1,2,3,4,5,6,7,8,9,10);
+my @names1 = (0,1,2,3,4,5,6,7,8,9,10,11);
 my @names2 = ( "amanda", "leo");
-#pushing(\@names1, \@names2);
-#print @names1;
+
+my @division = @names1[1..5];
+#print @division;
 #print "\n";
+
 splicing(\@names1);
 print @names1;
+print "\n";

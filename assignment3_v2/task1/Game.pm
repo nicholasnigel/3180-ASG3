@@ -69,7 +69,9 @@ sub showCards {
 }
 
 sub cardsToReturn {
+
     
+
 }
 
 
@@ -116,7 +118,7 @@ sub start_game {
             push(@card_stack, $dealtCard);    # push the dealt card to the game
             
             if( getReturn() > 0) {              #if the supposed return cards is greater than 0, means that there is a duplicate
-
+                $self->cardsToReturn();
             }
         
 

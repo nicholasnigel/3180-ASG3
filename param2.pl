@@ -41,15 +41,22 @@ sub pushing {
 my $names1 = shift @_;
 my $names2 = shift @_;
 splice @{$names1} , 1, 1;
+}
 
+sub splicing {
+    my $names1 = shift @_;
+
+    splice @{$names1} ,5, 3;
 
 }
 
 #printing (['james','jacqualine','jean']);
 #my @names = ("jon", "lambert");
 #printing2(@names);
-my @names1 = ( "joel", "rita");
+my @names1 = (0,1,2,3,4,5,6,7,8,9,10);
 my @names2 = ( "amanda", "leo");
-pushing(\@names1, \@names2);
+#pushing(\@names1, \@names2);
+#print @names1;
+#print "\n";
+splicing(\@names1);
 print @names1;
-print "\n";

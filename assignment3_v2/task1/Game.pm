@@ -62,24 +62,7 @@ sub showCards {
 
 }
 
-sub checkDuplicateExist {
-    my $self = shift @_;
-    my $dealtCard = shift @_;
 
-    my $stack_number = scalar(@card_stack);
-    if ($stack_number <2 ) {         # if the number of element in the stack is still 1, there is no way there is duplicate, so return 0
-        return 0;           
-    }
-
-    my $i = 0;
-    while ( $i < $stack_number -1 ) {
-        if $card_stack[$i] == $dealtCard {
-            return 1;
-        }
-        $i++;
-    } 
-
-}
 
 sub start_game {
     my $self = shift @_;
@@ -104,7 +87,12 @@ sub start_game {
     $self->{"deck"}->shuffle();
 
     #distribute the cards to the players
-    $self->{"deck"}->AveDealCards($number_of_players);
+    my @dis_cards = $self->{"deck"}->AveDealCards($number_of_players);
+
+    for my $i (0..$number_of_players -1 ) {
+        my @tempdeck = @{$dis_cards[$i]};
+        $self->{"players"}[$i] -> getCards(\@tempdeck);
+    }
 
     #splice to remove a player 
     #if no more card, remove the player , winner is the last person 
@@ -117,8 +105,7 @@ sub start_game {
             my $dealtCard = $player->dealCards();
             push(@card_stack, $dealtCard);    # push the dealt card to the game
             
-            if($self->checkDuplicateExist($dealtCard)) 
-            {
+            if( getReturn() > 0) {              #if the supposed return cards is greater than 0, 
                 
             }
         

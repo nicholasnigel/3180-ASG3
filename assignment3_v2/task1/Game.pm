@@ -83,7 +83,8 @@ sub cardsToReturn { #this subroutine shall pass the list of cards from card stac
                 $player->getCards(\@to_return);
            }
            if $cards[i] == "J" {
-               return scalar(@card_stack);
+               $player->getCards(\@card_stack);
+               splice 
            }
        }
    }

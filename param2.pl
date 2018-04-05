@@ -45,10 +45,15 @@ splice @{$names1} , 1, 1;
 
 sub splicing {
     my $names1 = shift @_;
-   print scalar(@{$names1});
-   print "\n";
+    print scalar(@{$names1});
+    my $total = 0;
+    print "\n";
+    foreach my $name (@{$names1}) {
+        $total += $name;
+    }
+    print "${total} \n";
     my @result =splice @{$names1} , 2, 4;
-
+    
     print @result;
     print "\n";
 }
@@ -65,4 +70,7 @@ my @division = @names1[1..5];
 
 splicing(\@names1);
 print @names1;
+splice @names1;
+print @names1;
+print "\n";
 print "\n";

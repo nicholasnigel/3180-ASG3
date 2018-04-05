@@ -17,7 +17,7 @@ sub new {
     my $DeckObject = MannerDeckStudent->new();
     #initializing player list starting with empty
     my @player_list ={};
-    my $object = bless{"deck" => \$DeckObject, "players" => \@players_list }, $class;
+    my $object = bless{"deck" => $DeckObject, "players" => \@players_list }, $class;
     return $object;
 }
 
@@ -30,7 +30,7 @@ sub set_players {
     my $index = 0;
     #for each name in the player_list, initialize the 
     foreach(@{$player_list}) {
-        $self->{"players"}[$i] = Player->new($_);
+        $self->{"players"}[$index] = Player->new($_);
         $index++
     }
     return 1; # to show that creation is successful, error message should be in the start_game
@@ -50,7 +50,7 @@ sub getReturn {
            if $cards[$i] == $cards[$j] {
                return $j - $i;
            }
-           if $cards[i] == "J" {
+           if $cards[$i] == "J" {
                return scalar(@card_stack);
            }
        }
@@ -70,8 +70,8 @@ sub showCards {
 
 sub cardsToReturn { #this subroutine shall pass the list of cards from card stack to get cards , and delete it from the card stack
 
-    $self = shift @_;
-    $player = shift @_;
+    my $self = shift @_;
+    my $player = shift @_;
     my $i = 0;
 
     my $card_stack_num = scalar(@card_stack);
@@ -82,16 +82,28 @@ sub cardsToReturn { #this subroutine shall pass the list of cards from card stac
                 my @to_return =  splice @card_stack , $i, $j-$i +1;
                 $player->getCards(\@to_return);
            }
-           if $cards[i] == "J" {
+           if $cards[$i] == "J" {
                $player->getCards(\@card_stack);
-               splice 
+               splice @card_stack;
            }
        }
    }
 }
     
+sub removePlayer {
+    my $self = shift @_;
+    my $player_to_remove = shift @_;
+    my $num_of_player = scalar(@{$self->{"players"}});
 
+    my $i = 0;
+    while($i <$num_of_player ) {
+        if $self->{"players"}[i] == $player_to_remove {
+            splice @{$self->{"players"}}, $i, 1;        #if the player is the same, remove that player from the game
+        }
+    }
+    
 }
+
 
 
 
@@ -140,6 +152,10 @@ sub start_game {
                 $self->cardsToReturn($player);
             }
         
+            if $player->numCards() == 0 {       # if the number of card is 0, then 
+                    #remove the player from the list of player
+                $self->removePlayer($player)
+            }        
 
         }
     }

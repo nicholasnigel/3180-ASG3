@@ -2,11 +2,13 @@ use strict;
 use warnings;
 
 package Game;
+
 use MannerDeckStudent; 
 use Player;
 
-#variable shared by the players within the game
-our @card_stack = ();
+
+our @card_stack = ();   # cards_stack is to store the stack of dealt cards , shared by player
+
 #any self within this package means the game itself.
 sub new {
 	#Instantiate a variable deck with a Deck object
@@ -16,7 +18,7 @@ sub new {
     #initialize new deck
     my $DeckObject = MannerDeckStudent->new();
     #initializing player list starting with empty
-    my @player_list ={};
+    my @players_list ={};
     my $object = bless{"deck" => $DeckObject, "players" => \@players_list }, $class;
     return $object;
 }
@@ -45,12 +47,12 @@ sub getReturn {
 
     my $card_stack_num = scalar(@card_stack);
 
-   while $i < $card_stack_num - 1 {
-       while my $j = $i +1 < $card_stack_num {
-           if $cards[$i] == $cards[$j] {
+   while ($i < $card_stack_num - 1) {
+       while (my $j = $i +1 < $card_stack_num) {
+           if ($card_stack[$i] == $card_stack[$j]) {
                return $j - $i;
            }
-           if $cards[$i] == "J" {
+           if ($card_stack[$i] == "J") {
                return scalar(@card_stack);
            }
        }
@@ -61,9 +63,9 @@ sub getReturn {
 
 #show cards on cardstack
 sub showCards {
-	#use the @cards_stack variable to show what are there
+	#use the @card_stack variable to show what are there
     my $class = shift @_;
-    print join (" ", @cards);
+    print join (" ", @card_stack);
     print "\n";
 
 }
@@ -76,13 +78,13 @@ sub cardsToReturn { #this subroutine shall pass the list of cards from card stac
 
     my $card_stack_num = scalar(@card_stack);
 
-   while $i < $card_stack_num - 1 {
-       while my $j = $i +1 < $card_stack_num {
-           if $cards[$i] == $cards[$j] {
+   while ($i < $card_stack_num - 1) {
+       while (my $j = $i +1 < $card_stack_num) {
+           if ($card_stack[$i] == $card_stack[$j]) {
                 my @to_return =  splice @card_stack , $i, $j-$i +1;
                 $player->getCards(\@to_return);
            }
-           if $cards[$i] == "J" {
+           if ($card_stack[$i] == "J") {
                $player->getCards(\@card_stack);
                splice @card_stack;
            }
@@ -97,7 +99,7 @@ sub removePlayer {
 
     my $i = 0;
     while($i <$num_of_player ) {
-        if $self->{"players"}[i] == $player_to_remove {
+        if ($self->{"players"}[$i] == $player_to_remove) {
             splice @{$self->{"players"}}, $i, 1;        #if the player is the same, remove that player from the game
         }
     }
@@ -106,26 +108,25 @@ sub removePlayer {
 
 
 
-
-sub start_game {
+# sub routine that starts the game
+sub start_game {            
     my $self = shift @_;
-    #deck should be shuffled evenly and distribute the cards evenly
-    #but check player_num first of all
-    my $number_of_players = scalar @{$self->{"players"}};
     
-    # if >52 or 52%n !=0
-    if (52 % $number_of_players) != 0 || $number_of_players >52) {
-        #error message 
+    my $number_of_players = scalar @{$self->{"players"}};   # check number of players
+    
+    
+    if (((52 % $number_of_players)) != 0 || $number_of_players >52) {  # if 52 cant be divided by number of player, error
+        print "Error: cards' number 52 can not be divided by players number $number_of_players!";     # error message 
         return 1;
     }
 
-    print "there ${number_of_players} players in the game:\n"
+    print "there $number_of_players players in the game:\n";
 
     #print the names of player
-    foreach my $name ($self->{"players"}) {
-        print $name. "\n";
+    foreach ($self->{"players"}) {
+        print "$_ ";
     }
-
+    print "\n";
     #shuffle deck
     $self->{"deck"}->shuffle();
 
@@ -142,7 +143,7 @@ sub start_game {
     
     while(scalar @{$self->{"players"}} > 1 ) {
         # go through the player list and each should play
-        foreach $player ($self->{"players"}) {
+        foreach my $player ($self->{"players"}) {
            
             #NOTE: push (@array, @list) will append @list to @array.
             my $dealtCard = $player->dealCards();    # each player deal a card 
@@ -152,9 +153,9 @@ sub start_game {
                 $self->cardsToReturn($player);
             }
         
-            if $player->numCards() == 0 {       # if the number of card is 0, then 
+            if ($player->numCards() == 0) {       # if the number of card is 0, then 
                     #remove the player from the list of player
-                $self->removePlayer($player)
+                $self->removePlayer($player);
             }        
 
         }

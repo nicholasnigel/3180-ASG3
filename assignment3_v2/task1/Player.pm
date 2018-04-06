@@ -8,7 +8,7 @@ sub new {
     my $name = shift @_;
     my @card_person = ();
     my $object = bless {"name" => $name, "cards" => \@card_person }, $class;
-    return object;
+    return $object;
 }
 #suppose the parameter is a list of card reference to be put on the bottom of the deck
 sub getCards {
@@ -35,7 +35,7 @@ sub dealCards {
 #returning the current number of card
 sub numCards {
     my $self = shift @_;
-    return scalar(@{self->{"cards"}});
+    return scalar(@{$self->{"cards"}});
 }
 
 

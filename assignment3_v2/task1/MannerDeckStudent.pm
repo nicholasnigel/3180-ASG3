@@ -12,6 +12,4 @@ sub shuffle {
 		@$card[$j, $i] = @$card[$i, $j];
 	}
 }
-
-
 return 1;

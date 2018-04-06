@@ -6,7 +6,7 @@ package Game;
 use MannerDeckStudent; 
 use Player;
 
-
+return 1;
 our @card_stack = ();   # cards_stack is to store the stack of dealt cards , shared by player
 
 #any self within this package means the game itself.
@@ -44,21 +44,27 @@ sub getReturn {
     my $class = shift @_;
     
     my $i = 0;
-
+    my $j = 0;
     my $card_stack_num = scalar(@card_stack);
+    print "$card_stack_num" . "\n";
 
-   while ($i < $card_stack_num - 1) {
-       while (my $j = $i +1 < $card_stack_num) {
-           if ($card_stack[$i] == $card_stack[$j]) {
+    while ($i < $card_stack_num - 1) {
+       while ( $j = $i +1 < $card_stack_num) {
+           if ($card_stack[$i] eq $card_stack[$j]) {
                return $j - $i;
            }
-           if ($card_stack[$i] == "J") {
+           if ($card_stack[$i] eq "J") {
                return scalar(@card_stack);
            }
+           $j++;
        }
-   }
+    $i++;
+   }    
+
+
+    return 0;          #if there are no duplicte found, then that means, return 0 because nothing is supposed to be returned
 }
-    return 0;           #if there are no duplicte found, then that means, return 0 because nothing is supposed to be returned
+    
 
 
 #show cards on cardstack
@@ -88,7 +94,9 @@ sub cardsToReturn { #this subroutine shall pass the list of cards from card stac
                $player->getCards(\@card_stack);
                splice @card_stack;
            }
+           $j++;
        }
+       $i++;
    }
 }
     
@@ -102,6 +110,7 @@ sub removePlayer {
         if ($self->{"players"}[$i] == $player_to_remove) {
             splice @{$self->{"players"}}, $i, 1;        #if the player is the same, remove that player from the game
         }
+        $i++;
     }
     
 }
@@ -116,21 +125,24 @@ sub start_game {
     
     
     if (((52 % $number_of_players)) != 0 || $number_of_players >52) {  # if 52 cant be divided by number of player, error
-        print "Error: cards' number 52 can not be divided by players number $number_of_players!";     # error message 
+        print "Error: cards' number 52 can not be divided by players number $number_of_players!\n";     # error message 
         return 1;
     }
 
     print "there $number_of_players players in the game:\n";
 
     #print the names of player
-    foreach ($self->{"players"}) {
-        print "$_ ";
+    foreach my $player (@{$self->{"players"}}) {
+        print $player->{"name"};
+        print " ";
     }
     print "\n";
-    #shuffle deck
-    $self->{"deck"}->shuffle();
+    
+    print"\nGame Begin!!!\n";
 
-    #distribute the cards to the players
+    $self->{"deck"}->shuffle(); #shuffle deck
+
+   
     my @dis_cards = $self->{"deck"}->AveDealCards($number_of_players);  #the list of distributed cards
 
     for my $i (0..$number_of_players -1 ) {
@@ -138,31 +150,51 @@ sub start_game {
         $self->{"players"}[$i] -> getCards(\@tempdeck);                 # each player get the deck
     }
 
-    #splice to remove a player 
-    #if no more card, remove the player , winner is the last person 
     
-    while(scalar @{$self->{"players"}} > 1 ) {
+    
+    while($number_of_players > 1 ) {
         # go through the player list and each should play
-        foreach my $player ($self->{"players"}) {
-           
-            #NOTE: push (@array, @list) will append @list to @array.
+
+        foreach my $player (@{$self->{"players"}}) {
+            my $card_per_player = scalar(@{$player->{"cards"}});      #find the number of card the player has
+            
+
+            print "Player ". $player->{"name"}. " has " . $card_per_player . " cards before deal";   #print first prompt: player ___ has ___ cards before deal
+            print "\n";
+            print "=====Before player's deal=======\n\n";
+
+            print "================================\n";
+            
+
             my $dealtCard = $player->dealCards();    # each player deal a card 
+            print $player->{"name"}. " ==> card " . $dealtCard. "\n";
             push(@card_stack, $dealtCard);    # push the dealt card to the game
+           
             
             if( getReturn() > 0) {              #if the supposed return cards is greater than 0, means that there is a duplicate
                 $self->cardsToReturn($player);
             }
-        
+            
+            
+            print "=====After player's deal=======\n";
+            print @card_stack;
+            print "\n";
+            print "================================\n";
+            my $card_per_player_afterdeal = scalar(@{$player->{"cards"}});
+            print "Player ". $player->{"name"}. " has " . $card_per_player_afterdeal . " cards after deal\n\n";
             if ($player->numCards() == 0) {       # if the number of card is 0, then 
-                    #remove the player from the list of player
-                $self->removePlayer($player);
+
+                $self->removePlayer($player);       #remove the player from the list of player
+                $number_of_players-- ;
             }        
 
         }
+
+
     }
 
     
     
 }
 
-return 1;
+

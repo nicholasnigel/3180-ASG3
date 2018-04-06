@@ -28,7 +28,7 @@ sub dealCards {
     my $card_to_deal = $self->{"cards"}->[0];
     #shift to pop the first element
     shift $self->{"cards"};
-
+    
     return $card_to_deal;
 
 }

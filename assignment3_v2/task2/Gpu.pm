@@ -61,5 +61,13 @@ sub execute_one_time {
 }
 
 
+#```````````````````````SUBROUTINE TO RETURN THE ID OF GPU````````````````````````
+sub id {
+    my $self = shift @_;
+    return $self->{"gpu_id"};
+
+}
+
+
 
 return 1;

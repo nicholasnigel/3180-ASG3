@@ -57,6 +57,7 @@ sub release {
 #  When the task is finished, it will be released.
 sub execute_one_time {
 	my $self = shift @_;
+
 	$self->{"time"}++; # GPU time (cur_time)++
 	if ($self->{"task"}->{"time"} == $self->{"time"} ){
 		$self->release();

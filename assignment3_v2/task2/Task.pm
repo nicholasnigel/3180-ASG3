@@ -27,7 +27,7 @@ sub new {   # calling new = Task->new(name,time)
 }
 
 #```````````````SUBROUTINE TO GET OBJECT NAME ```````````````````
-sub getName {       # sample use: $task->getName();
+sub name {       # sample use: $task->getName();
     my $self = shift @_;
     
     my $name_return = $self->{"name"};
@@ -36,7 +36,7 @@ sub getName {       # sample use: $task->getName();
 }
 
 #`````````````````SUBROUTINE TO GET THE TASK'S TOTAL TIME ``````````````
-sub getTotalTime { 
+sub pid { 
     my $self = shift @_;
 
     my $total_time = $self->{"total_time"};
@@ -45,7 +45,7 @@ sub getTotalTime {
 }
 
 #`````````````````SUBROUTINE TO GET TASK'S ID```````````````````
-sub getPID {
+sub time {
     my $self = shift @_;
     my $pid = $self->{"pid"};
 

@@ -1,6 +1,7 @@
 use strict;
 use warnings;
- 
+ #you are required to use dynamic scoping here
+
 package Server;
 use Gpu;
 use Task;

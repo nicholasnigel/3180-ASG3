@@ -71,6 +71,6 @@ my @division = @names1[1..5];
 splicing(\@names1);
 #print @names1;
 my @bonjour = splice @names1;
-print @bonjour;
-print "\n";
-print "\n";
+print "@names1";
+print "@bonjour \n";
+

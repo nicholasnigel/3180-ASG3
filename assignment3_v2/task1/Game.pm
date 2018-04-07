@@ -46,23 +46,31 @@ sub getReturn {
     my $i = 0;
     my $j = 0;
     my $card_stack_num = scalar(@card_stack);
-    print "$card_stack_num" . "\n";
 
-    while ($i < $card_stack_num - 1) {
-       while ( $j = $i +1 < $card_stack_num) {
-           if ($card_stack[$i] eq $card_stack[$j]) {
-               return $j - $i;
-           }
-           if ($card_stack[$i] eq "J") {
-               return scalar(@card_stack);
-           }
-           $j++;
-       }
-    $i++;
-   }    
+    
+    for ($i = 0 ; $i<$card_stack_num  ; $i++) {
+        if($card_stack[$i] eq "J") {
+            my $position = $i+1;
+
+            if($i !=0){
+            return $card_stack_num;     # if you have obtained Jack and it's not in the first element, then return all card stack
+            }
+            
+    }
+        for ($j = $i + 1; $j< $card_stack_num ; $j++) {
+
+            if($card_stack[$i] eq $card_stack[$j]) {
+
+                return ($j - $i +1);            # if you find same card, then return the range inclusively
+            }
+
+        }
+
+    }
 
 
     return 0;          #if there are no duplicte found, then that means, return 0 because nothing is supposed to be returned
+
 }
     
 
@@ -76,29 +84,12 @@ sub showCards {
 
 }
 
-sub cardsToReturn { #this subroutine shall pass the list of cards from card stack to get cards , and delete it from the card stack
 
-    my $self = shift @_;
-    my $player = shift @_;
-    my $i = 0;
 
-    my $card_stack_num = scalar(@card_stack);
+   
 
-   while ($i < $card_stack_num - 1) {
-       while (my $j = $i +1 < $card_stack_num) {
-           if ($card_stack[$i] == $card_stack[$j]) {
-                my @to_return =  splice @card_stack , $i, $j-$i +1;
-                $player->getCards(\@to_return);
-           }
-           if ($card_stack[$i] == "J") {
-               $player->getCards(\@card_stack);
-               splice @card_stack;
-           }
-           $j++;
-       }
-       $i++;
-   }
-}
+
+
     
 sub removePlayer {
     my $self = shift @_;
@@ -107,8 +98,9 @@ sub removePlayer {
 
     my $i = 0;
     while($i <$num_of_player ) {
-        if ($self->{"players"}[$i] == $player_to_remove) {
+        if ($self->{"players"}[$i] eq $player_to_remove) {
             splice @{$self->{"players"}}, $i, 1;        #if the player is the same, remove that player from the game
+            return 1;
         }
         $i++;
     }
@@ -118,7 +110,7 @@ sub removePlayer {
 
 
 # sub routine that starts the game
-sub start_game {            
+sub start_game {         
     my $self = shift @_;
     
     my $number_of_players = scalar @{$self->{"players"}};   # check number of players
@@ -129,7 +121,7 @@ sub start_game {
         return 1;
     }
 
-    print "there $number_of_players players in the game:\n";
+    print "There $number_of_players players in the game:\n";
 
     #print the names of player
     foreach my $player (@{$self->{"players"}}) {
@@ -138,7 +130,7 @@ sub start_game {
     }
     print "\n";
     
-    print"\nGame Begin!!!\n";
+    print"\nGame begin!!!\n\n";
 
     $self->{"deck"}->shuffle(); #shuffle deck
 
@@ -150,7 +142,7 @@ sub start_game {
         $self->{"players"}[$i] -> getCards(\@tempdeck);                 # each player get the deck
     }
 
-    
+    my $round = 0;
     
     while($number_of_players > 1 ) {
         # go through the player list and each should play
@@ -159,9 +151,10 @@ sub start_game {
             my $card_per_player = scalar(@{$player->{"cards"}});      #find the number of card the player has
             
 
-            print "Player ". $player->{"name"}. " has " . $card_per_player . " cards before deal";   #print first prompt: player ___ has ___ cards before deal
+            print "Player ". $player->{"name"}. " has " . $card_per_player . " cards before deal.";   #print first prompt: player ___ has ___ cards before deal
             print "\n";
-            print "=====Before player's deal=======\n\n";
+            print "=====Before player's deal=======\n";
+            print "@card_stack\n";
 
             print "================================\n";
             
@@ -171,29 +164,36 @@ sub start_game {
             push(@card_stack, $dealtCard);    # push the dealt card to the game
            
             
-            if( getReturn() > 0) {              #if the supposed return cards is greater than 0, means that there is a duplicate
-                $self->cardsToReturn($player);
+
+            if($self->getReturn() > 0 ) {              #if the supposed return cards is greater than 0, means that there is a duplicate
+                $player->findCardToReturn(\@card_stack);
             }
-            
+
             
             print "=====After player's deal=======\n";
-            print @card_stack;
+            print "@card_stack";# printing content of card stack
             print "\n";
             print "================================\n";
             my $card_per_player_afterdeal = scalar(@{$player->{"cards"}});
-            print "Player ". $player->{"name"}. " has " . $card_per_player_afterdeal . " cards after deal\n\n";
+            print "Player ". $player->{"name"}. " has " . $card_per_player_afterdeal . " cards after deal.\n";
+            #print "Player ". $player->{"name"}. " has deck:\n";
+            #print @{$player->{"cards"}};
+            #print "\n";
             if ($player->numCards() == 0) {       # if the number of card is 0, then 
-
+                print "Player ". $player->{"name"} . " has no cards, out!\n";
                 $self->removePlayer($player);       #remove the player from the list of player
                 $number_of_players-- ;
+                
             }        
+            print "\n";
 
         }
-
+        $round++;
 
     }
-
     
+    my $winner = $self->{"players"}->[0]->{"name"};
+    print "Winner is $winner in game $round\n";
     
 }
 

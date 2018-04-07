@@ -12,12 +12,11 @@ print "originally squirtle hp is $squirtle->{'HP'} \n" ;
 print "originally blastoise hp is $blastoise->{'HP'} \n";
 my @players = ($squirtle, $blastoise);
 
+our $target;
+our $target_hp;
 
-foreach my $pokemon (@players) {
-    $pokemon->heal();
-}
-print "now squirtle hp is $squirtle->{'HP'}\n" ;
-print "now blastoise hp is $blastoise->{'HP'}\n";
-#proves that when use foreach, it the new symbol, it references to the component of the array itself
+$squirtle->attack($blastoise);
+$squirtle->attack($blastoise);
+
 
 

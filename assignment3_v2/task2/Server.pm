@@ -6,6 +6,8 @@ package Server;
 use Gpu;
 use Task;
 
+our $task;	#for the purpose of dynamic scoping
+our $gpu;	#for the purpose of dynamic
 #``````````````````````````````````INITIALIZATION OF THE SERVER CLASS OBJECT````````````````````````
 sub new {
 	my $class = shift @_;
@@ -14,12 +16,12 @@ sub new {
 	my @gpus = ();			#the list of gpus
 
 	for (my $i = 0 ; $i < $gpu_num ; $i++) {
-		$gpus[$i] = Gpu->mew($i);		#initialize the GPUs with their corresponding ids, starting from 0 to gpu_num-1
+		$gpus[$i] = Gpu->new($i);		#initialize the GPUs with their corresponding ids, starting from 0 to gpu_num-1
 	}
 	my @waitq = ();		#initially, waitq should be empty
 
 	my $object = bless {
-		"gpu_number" => $gpu_num.
+		"gpu_number" => $gpu_num,
 		"gpus" => \@gpus,
 		"waitq" => \@waitq
 	}, $class;
@@ -50,19 +52,21 @@ sub submit_task {	# usage =  $server->submit_task("lin", 6);
 	my $user = shift @_;
 	my $total_time = shift @_;
 
-	local $task_to_assign = Task->new($user,$total_time);
+	local $task = Task->new($user,$total_time);
 	local $gpu;
 
-	foreach $gpu ($self->{"gpus"}) {
+	foreach $gpu (@{$self->{"gpus"}} ) {
 		if ( $gpu->{"gpu_state"} == 0 )	{
-			print $self->task_info($task_to_assign)." => ".$self->gpu_info($gpu);
+			#print $self->task_info($task_to_assign)." => ".$self->gpu_info($gpu);
+			print task_info() . " => ". gpu_info;
 			print "\n";
-			$gpu->assign_task($task_to_assign);
+			$gpu->assign_task($task);
+			return 1;		# if a gpu is already found, just return a value (1) to show successful
 		}	# if available (idling) , then assign a task
-		return 1;		# if a gpu is already found, just return a value (1) to show successful
+		
 	}
-	print $self->task_info($task_to_assign). " => waiting queue\n";	# when it reaches this part, that means that no idle gpu is found
-	push @{$self->{"waitq"}}, $task_to_assign;  					# push the task into the waitqueue
+	print task_info(). " => waiting queue\n";	# when it reaches this part, that means that no idle gpu is found
+	push @{$self->{"waitq"}}, $task;  					# push the task into the waitqueue
 
 }
 
@@ -75,12 +79,13 @@ sub deal_waitq {
 
 	my $num_in_waitq = scalar( @{$self->{"waitq"}}  );
 	if($num_in_waitq >= 1 ) {	#if there is something in the queue	
-		foreach $gpu ($self->{"gpus"} ) {
+		foreach $gpu ( @{$self->{"gpus"}} ) {
 			if ($gpu->{"gpu_state"} == 0 ) {
 				$task = $self->{"waitq"}->[0];
-				print $self->task_info($task). " => ". $self->gpu_info($gpu);
+				print task_info(). " => ". $self->gpu_info($gpu);
 				$gpu->assign_task( $task );		# if there is an idle gpu, then assign the first task in wait q to that gpu
 				splice @{$self->{"waitq"}} , 0 ,1;	# delete that task from the waiting queue
+				print "\n";
 			}
 		}	# check the gpu if there are any space to run this task
 	}
@@ -100,20 +105,22 @@ sub kill_task {
 
 	# check within the list of gpus of the server
 	foreach $gpu ( @{$self->{"gpus"}}  ) {
-		$task = $gpu->{"tasks"};
+		$task = $gpu->{"gpu_task"};
+
 		if( ($task->{"name"} eq $username)  && $task->{"pid"} == $pid  ) {
 			$gpu->release();	#if they have same name and pid, then release that gpu
-			print "user $username kill "$task->task_info();
+			print "user $username kill ". task_info();
 			print "\n";
+			$self->deal_waitq();
 			return 1; 		# showing that it successfully deleted
 		}
 	}
 
-	for (my $i=0; $i < scalar(@{$self->{"waitq"}})-1 ; $i++ ) {
+	for (my $i=0; $i < scalar(@{$self->{"waitq"}}) ; $i++ ) {	# if not found in the gpu run , look for it in the waitingq
 		$task = $self->{"waitq"}[$i];
-		if( ($task->{"name"} eq $username) && $task->{"pid"} == $pid  ) {
+		if( ($task->{"name"} eq $username) && ($task->{"pid"} == $pid)  ) {
 			splice @{$self->{"waitq"}}, $i, 1;		# if the task has the same name and pid, 
-			print "user $username kill "$task->task_info();
+			print "user $username kill ". task_info();
 			print "\n";
 			return 1;
 		}
@@ -162,7 +169,7 @@ sub show {	# subroutine that prints out the usage of the gpus
 		if( $gpu->{"gpu_state"} == 0 ) {
 			print "idle";
 		}
-		else if( $gpu->{"gpu_state"} == 1 ) {
+		elsif( $gpu->{"gpu_state"} == 1 ) {
 			print "busy";
 		}
 
@@ -181,21 +188,23 @@ sub show {	# subroutine that prints out the usage of the gpus
 			print "\n";
 		}
 	}
+	my $queue_num = scalar ( @{$self->{"waitq"}});
+	if($queue_num > 0) {
 
-	foreach $task( $self->{"waitq"} ) {
+	foreach my $task( @{$self->{"waitq"}} ) {
 		print "        "; 	# the spacing first
 		print "wait";
 		print "   ";
-		print $task->name();
+		print $task->{"name"};
 		print "    ";
-		print $task->pid();
+		print $task->{"pid"};
 		print "      ";
-		print $task->time();
+		print $task->{"total_time"};
 		print "\n";
 
 
 	}		# after printing the gpus, then check if there are tasks in waitq
-
+}
 	print "============================================\n\n"#by the end print the border
 }
 

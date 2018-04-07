@@ -17,7 +17,7 @@ sub new {       # sample usage Gpu -> new(1);
         "gpu_state" => $gpu_state,
         "gpu_current_time" => $gpu_current_time,
         "gpu_task" => $gpu_task
-    }$class;   # bless the object, and return it
+    },$class;   # bless the object, and return it
 
     return $object;
 }
@@ -53,9 +53,9 @@ sub execute_one_time {
 
     $self->{"gpu_current_time"} += 1;
 
-    if( $self->{"gpu_current_time"} == $self->{"task"}->{"total_time"} ){
+    if( $self->{"gpu_current_time"} == $self->{"gpu_task"}->{"total_time"} ){
         $self->release();    
-        print "task in gpu(id: ". $self->{"gpu_id"} ." finished\n";
+        print "task in gpu(id: ". $self->{"gpu_id"} .") finished\n";
     }#compare the gpu current time and the tasks' total required time
 
 

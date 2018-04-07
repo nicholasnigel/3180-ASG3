@@ -10,7 +10,7 @@ sub new {   # calling new = Task->new(name,time)
     my $name = shift @_;    
     my $total_time = shift @_;
 
-    if( $time != -1) {
+    if( $total_time != -1) {
         # if when creating time is negative one, dont change the pid = -1
         $pid++;
     }

@@ -2,6 +2,9 @@
 use warnings;
 use strict;
 
+our $target;
+our $target_hp;
+
 package WaterTypePokemon;
 sub new{
 
@@ -18,11 +21,23 @@ print "Hello\n";
 
 }
 
+sub printHP {
+   print $target->{"weight"};
+   print "\n";
+   print $target_hp;
+   print "\n";
+}
+
 sub attack {
-    my $class = shift @_ ;
-    my $target = shift @_ ;
+    my $self = shift @_ ;
+    local $target = shift @_ ;
     
     $target->{"HP"} -= 10;
+    
+    local $target_hp = $target->{"HP"};
+    my $str = printHP();
+
+    print "\n";
 }
 
 sub heal {

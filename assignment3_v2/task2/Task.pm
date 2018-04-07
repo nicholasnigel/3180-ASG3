@@ -10,11 +10,18 @@ sub new {   # calling new = Task->new(name,time)
     my $name = shift @_;    
     my $total_time = shift @_;
 
+    if( $time == -1) {
+        # if when creating time is negative one, dont change the pid = -1
+        $pid = -1;
+    }
+
     my $object = bless {
         "name" => $name,
         "total_time" => $total_time,
         "pid" => $pid,
-    }, $class;
+    }, $class;      # blessing object with the corresponding name, total_time, and PID
+
+    $pid++;         # when you successfully created object, the pid should be added, if time == -1, pid == -1 as well
 
     return $object;
 }
@@ -25,7 +32,7 @@ sub getName {       # sample use: $task->getName();
     
     my $name_return = $self->{"name"};
 
-    return $name_return;
+    return $name_return;    
 }
 
 #`````````````````SUBROUTINE TO GET THE TASK'S TOTAL TIME ``````````````

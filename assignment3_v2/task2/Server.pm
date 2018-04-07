@@ -110,7 +110,7 @@ sub kill_task {
 	}
 
 	for (my $i=0; $i < scalar(@{$self->{"waitq"}})-1 ; $i++ ) {
-		$task = $self->{"waitq"}[i];
+		$task = $self->{"waitq"}[$i];
 		if( ($task->{"name"} eq $username) && $task->{"pid"} == $pid  ) {
 			splice @{$self->{"waitq"}}, $i, 1;		# if the task has the same name and pid, 
 			print "user $username kill "$task->task_info();
@@ -127,11 +127,76 @@ sub kill_task {
 
 #`````````````````````````` EXECUTE ALL THE GPU ONE UNIT TIME. THE TASK	IS FINISHED ONCE REACHING THE SET EXECUTION TIME````````
 sub execute_one_time {
-
+	my $self = shift @_;
+	local $gpu;
+	print "execute_one_time..\n";
+	foreach $gpu ( @{$self->{"gpus"}} ) {
+		if ( $gpu->{"gpu_state"} == 0 ) {	# if state is 0, go to the next gpu
+			next;
+		}
+		else {
+			$gpu->execute_one_time();		# for each gpu in the list of gpus, execute one time for each
+			$self->deal_waitq();		#after execute one time, then deal the waitq, in case whether something is finished.
+		}
+	}
 
 }
-sub show {
 
+
+#````````````````````````PRINT THE CURRENT GPU MESSAGE``````````````````````````````
+sub show {	# subroutine that prints out the usage of the gpus
+	my $self = shift @_;
+	local $task; 
+	local $gpu;
+
+	print "==============Server Message================\n";	
+
+	print "gpu-id  state  user  pid  tot_time  cur_time\n";
+
+	# for each gpu, print the line with same format
+	foreach $gpu ( @{$self->{"gpus"}} ) {
+		$task = $gpu->{"gpu_task"};
+		#"  0     busy   lin    0      6         1" This should be the format that we are following
+		print "  ". $gpu->{"gpu_id"};
+		print "     ";
+		if( $gpu->{"gpu_state"} == 0 ) {
+			print "idle";
+		}
+		else if( $gpu->{"gpu_state"} == 1 ) {
+			print "busy";
+		}
+
+		if( $task->{"total_time"} == -1 ) {	# if it's the dummy target, print blank for the rest
+			print "\n";
+		}
+		else {
+			print "   ";
+			print $task->{"name"};
+			print "    ";
+			print $task->{"pid"};
+			print "      ";
+			print $task->{"total_time"};
+			print "         ";
+			print $gpu->{"gpu_current_time"};
+			print "\n";
+		}
+	}
+
+	foreach $task( $self->{"waitq"} ) {
+		print "        "; 	# the spacing first
+		print "wait";
+		print "   ";
+		print $task->name();
+		print "    ";
+		print $task->pid();
+		print "      ";
+		print $task->time();
+		print "\n";
+
+
+	}		# after printing the gpus, then check if there are tasks in waitq
+
+	print "============================================\n\n"#by the end print the border
 }
 
 

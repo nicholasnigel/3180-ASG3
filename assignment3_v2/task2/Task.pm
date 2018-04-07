@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package Task;
-our $pid = 0 ;       # the first pid ever should be 0
+our $pid = -1 ;       # the first pid ever should be 0
 
 #``````````````SUBROUTINE FOR BLESSING A NEW OBJECT ````````````````````````
 sub new {   # calling new = Task->new(name,time)
@@ -10,18 +10,18 @@ sub new {   # calling new = Task->new(name,time)
     my $name = shift @_;    
     my $total_time = shift @_;
 
-    if( $time == -1) {
+    if( $time != -1) {
         # if when creating time is negative one, dont change the pid = -1
-        $pid = -1;
+        $pid++;
     }
-
+    
     my $object = bless {
         "name" => $name,
         "total_time" => $total_time,
         "pid" => $pid,
     }, $class;      # blessing object with the corresponding name, total_time, and PID
 
-    $pid++;         # when you successfully created object, the pid should be added, if time == -1, pid == -1 as well
+
 
     return $object;
 }
@@ -36,7 +36,7 @@ sub name {       # sample use: $task->getName();
 }
 
 #`````````````````SUBROUTINE TO GET THE TASK'S TOTAL TIME ``````````````
-sub pid { 
+sub time { 
     my $self = shift @_;
 
     my $total_time = $self->{"total_time"};
@@ -45,7 +45,7 @@ sub pid {
 }
 
 #`````````````````SUBROUTINE TO GET TASK'S ID```````````````````
-sub time {
+sub pid {
     my $self = shift @_;
     my $pid = $self->{"pid"};
 

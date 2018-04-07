@@ -55,6 +55,7 @@ sub execute_one_time {
 
     if( $self->{"gpu_current_time"} == $self->{"task"}->{"total_time"} ){
         $self->release();    
+        print "task in gpu(id: ". $self->{"gpu_id"} ." finished\n";
     }#compare the gpu current time and the tasks' total required time
 
 

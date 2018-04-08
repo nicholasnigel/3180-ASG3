@@ -166,8 +166,10 @@ sub start_game {
     
     while($number_of_players > 1 ) {
         # go through the player list and each should play
-
-        foreach my $player (@{$self->{"players"}}) {
+        my $i = 0;
+        while( $i< $number_of_players) {
+            
+            my $player = $self->{"players"}->[$i];
             my $card_per_player = scalar(@{$player->{"cards"}});      #find the number of card the player has
             
 
@@ -203,10 +205,19 @@ sub start_game {
                 print "Player ". $player->{"name"} . " has no cards, out!\n";
                 $self->removePlayer($player);       #remove the player from the list of player
                 $number_of_players-- ;
+                $i-=1;
                 
-            }        
+            }       
+            my $remaining_player = scalar (@{$self->{"players"}});
+            
+
             print "\n";
 
+            if ( $remaining_player == 1) {
+                last;
+            }
+
+            $i++;
         }
         $round++;
 

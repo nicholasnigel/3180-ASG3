@@ -1,3 +1,24 @@
+=begin comment
+/*
+ * CSCI3180 Principles of Programming Languages
+ *
+ * --- Declaration ---
+ *
+ * I declare that the assignment here submitted is original except for source
+ * material explicitly acknowledged. I also acknowledge that I am aware of
+ * University policy and regulations on honesty in academic work, and of the
+ * disciplinary guidelines and procedures applicable to breaches of such policy
+ * and regulations, as contained in the website
+ * http://www.cuhk.edu.hk/policy/academichonesty/
+ *
+ * Assignment 3
+ * Name : Nigel Nicholas
+ * Student ID : 1155088791
+ * Email Addr : nigel7@cse.cuhk.edu.hk
+ */
+
+=cut
+
 use strict;
 use warnings;
  #you are required to use dynamic scoping here

@@ -974,14 +974,4 @@ J 6
 Player lin has 0 cards after deal.
 Player lin has no cards, out!
 
-Player liz has 50 cards before deal.
-=====Before player's deal=======
-J 6
-================================
-liz ==> card 8
-=====After player's deal=======
-J 6 8
-================================
-Player liz has 49 cards after deal.
-
 Winner is liz in game 49

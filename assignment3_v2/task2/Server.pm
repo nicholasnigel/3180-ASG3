@@ -57,7 +57,7 @@ sub submit_task {	# usage =  $server->submit_task("lin", 6);
 
 	foreach $gpu (@{$self->{"gpus"}} ) {
 		if ( $gpu->{"gpu_state"} == 0 )	{
-			#print $self->task_info($task_to_assign)." => ".$self->gpu_info($gpu);
+
 			print task_info() . " => ". gpu_info;
 			print "\n";
 			$gpu->assign_task($task);
@@ -82,7 +82,7 @@ sub deal_waitq {
 		foreach $gpu ( @{$self->{"gpus"}} ) {
 			if ($gpu->{"gpu_state"} == 0 ) {
 				$task = $self->{"waitq"}->[0];
-				print task_info(). " => ". $self->gpu_info($gpu);
+				print task_info(). " => ". gpu_info();
 				$gpu->assign_task( $task );		# if there is an idle gpu, then assign the first task in wait q to that gpu
 				splice @{$self->{"waitq"}} , 0 ,1;	# delete that task from the waiting queue
 				print "\n";

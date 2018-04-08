@@ -176,7 +176,7 @@ sub show {	# subroutine that prints out the usage of the gpus
 		if( $task->{"total_time"} == -1 ) {	# if it's the dummy target, print blank for the rest
 			print "\n";
 		}
-		else {
+		else {			# else, it means that it is a legit task, therefore print all the things
 			print "   ";
 			print $task->{"name"};
 			print "    ";
@@ -191,15 +191,16 @@ sub show {	# subroutine that prints out the usage of the gpus
 	my $queue_num = scalar ( @{$self->{"waitq"}});
 	if($queue_num > 0) {
 
-	foreach my $task( @{$self->{"waitq"}} ) {
+	foreach $task( @{$self->{"waitq"}} ) {	# check also for the list in waitq
+		my ($name, $pid, $total_time) = task_attr();
 		print "        "; 	# the spacing first
 		print "wait";
 		print "   ";
-		print $task->{"name"};
+		print $name;
 		print "    ";
-		print $task->{"pid"};
+		print $pid;
 		print "      ";
-		print $task->{"total_time"};
+		print $total_time;
 		print "\n";
 
 
